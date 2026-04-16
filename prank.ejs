@@ -1,0 +1,57 @@
+<%- include('../partials/header', { title: 'QR Scan Result', hideHeader: true, hideFooter: true }) %>
+
+<style>
+body { margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+.prank-container { max-width: 500px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; }
+.card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-width: 400px; width: 100%; }
+.qr-icon { font-size: 80px; margin-bottom: 20px; }
+.card h1 { color: #333; margin-bottom: 20px; font-size: 28px; }
+.message-box { background: #f8f9fa; padding: 25px; border-radius: 15px; border-left: 5px solid #667eea; margin: 20px 0; }
+.message-box p { font-size: 22px; color: #555; margin: 0; font-weight: 500; }
+.emoji { font-size: 50px; margin: 20px 0; }
+.viral-section { margin-top: 30px; padding-top: 30px; border-top: 2px dashed #ddd; }
+.viral-section h3 { color: #667eea; margin-bottom: 15px; }
+.viral-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.btn-prank { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; }
+.btn-whatsapp { background: #25d366; color: white; padding: 12px 25px; border-radius: 25px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-copy { background: #f0f2f5; color: #333; padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer; font-weight: 500; }
+</style>
+
+<div class="prank-container">
+  <div class="card">
+    <div class="qr-icon">📲</div>
+    <h1>QR Code Scanned!</h1>
+    
+    <div class="message-box">
+      <p><%= prank.message %></p>
+    </div>
+    
+    <div class="emoji">😂</div>
+    
+    <div class="viral-section">
+      <h3>🎭 Got Pranked?</h3>
+      <p style="color: #666; margin-bottom: 20px;">Share the fun with your friends!</p>
+      
+      <div class="viral-buttons">
+        <a href="/fake-qr" class="btn-prank">Create Your Own QR Prank</a>
+        <a id="whatsappShare" href="#" class="btn-whatsapp" target="_blank">
+          <span>📱</span> Share on WhatsApp
+        </a>
+        <button class="btn-copy" onclick="copyLink()">Copy Link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const shareText = encodeURIComponent(`😂 I just got QR-pranked! Create your own: ${window.location.origin}/fake-qr`);
+document.getElementById('whatsappShare').href = `https://wa.me/?text=${shareText}`;
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.origin + '/fake-qr').then(() => {
+    alert('Link copied! Share it with friends.');
+  });
+}
+</script>
+
+<%- include('../partials/footer', { hideHeader: true, hideFooter: true }) %>

@@ -1,0 +1,104 @@
+<%- include('../partials/header', { title: 'Fake QR Code - PrankPay' }) %>
+
+<section class="page-header">
+  <div class="container">
+    <h1>📲 Fake QR Code Prank</h1>
+    <p>Generate a QR code that shows a prank message when scanned!</p>
+  </div>
+</section>
+
+<section class="prank-creator">
+  <div class="container">
+    <div class="creator-steps">
+      <div class="step active">
+        <div class="step-number">1</div>
+        <div class="step-label">Create</div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-label">Share</div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-label">Prank</div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <h2>Create Your QR Code Prank</h2>
+      <form id="fakeQrForm">
+        <div class="form-group">
+          <label for="message">Prank Message</label>
+          <textarea id="message" name="message" rows="3" required placeholder="e.g., You've been QR-pranked! 😂 Scan again to prank others!"></textarea>
+          <small>This message will appear when someone scans the QR code</small>
+        </div>
+        <button type="submit" class="btn-primary btn-full">
+          <span class="btn-icon">📲</span>
+          Generate QR Code
+        </button>
+      </form>
+
+      <div id="generatedQR" class="generated-link-container" style="display: none;">
+        <h3>🎉 Your QR Code is Ready!</h3>
+        <div class="qr-display">
+          <img id="qrImage" src="" alt="Prank QR Code">
+        </div>
+        <p class="qr-hint">Save this QR code image and share it!</p>
+        <a id="downloadBtn" href="#" download="prank-qr.png" class="btn-secondary">Download QR Code</a>
+        
+        <div class="share-buttons" style="margin-top: 20px;">
+          <a id="whatsappShare" href="#" class="btn-whatsapp" target="_blank">
+            <span>📱</span> Share on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h3>How it Works:</h3>
+      <div class="preview-cards">
+        <div class="preview-card">
+          <span class="preview-icon">📲</span>
+          <p>Friend scans QR</p>
+        </div>
+        <div class="preview-arrow">→</div>
+        <div class="preview-card">
+          <span class="preview-icon">📱</span>
+          <p>Opens prank page</p>
+        </div>
+        <div class="preview-arrow">→</div>
+        <div class="preview-card">
+          <span class="preview-icon">😂</span>
+          <p>Prank revealed!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.getElementById('fakeQrForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const message = document.getElementById('message').value;
+  
+  try {
+    const response = await fetch('/fake-qr/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+    const data = await response.json();
+    
+    document.getElementById('qrImage').src = data.qrCode;
+    document.getElementById('downloadBtn').href = data.qrCode;
+    document.getElementById('generatedQR').style.display = 'block';
+    
+    const text = encodeURIComponent(`Scan this QR code! ${data.url}`);
+    document.getElementById('whatsappShare').href = `https://wa.me/?text=${text}`;
+  } catch (error) {
+    alert('Error creating QR code. Please try again.');
+  }
+});
+</script>
+
+<%- include('../partials/footer') %>
